@@ -1,0 +1,32 @@
+{
+  "task_name": "mimo-saas-admin-rebuild",
+  "schedule": "5 16 * * *",
+  "timezone": "Europe/Dublin",
+  "command": "./run-mimo-scheduled.sh",
+  "timeout_minutes": 300,
+  "max_retries": 3,
+  "retry_delay_seconds": 60,
+  "description": "Daily deep refactor of AtlantGen SaaS admin panel per approved plan",
+  "notifications": {
+    "on_success": true,
+    "on_failure": true,
+    "webhook_url": null
+  },
+  "environment": {
+    "TZ": "Europe/Dublin",
+    "NODE_ENV": "production",
+    "GIT_AUTHOR_NAME": "MiMo Worker",
+    "GIT_AUTHOR_EMAIL": "mimo@atlantgen.com"
+  },
+  "pre_checks": [
+    "plan_file_exists",
+    "git_clean_worktree",
+    "no_concurrent_runs"
+  ],
+  "post_checks": [
+    "typecheck_pass",
+    "lint_pass",
+    "tests_pass",
+    "git_push_success"
+  ]
+}
